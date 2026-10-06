@@ -1,0 +1,80 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header {
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 25px;
+    font-size: 3rem;
+    color: white;
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+button {
+    padding: 12px 24px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ff6600;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #e65c00;
+    transform: translateY(-3px);
+}
+.home-page {
+background-image: url('RDback.png');
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+background-attachment: fixed;
+min-height: 100vh;
+}
+.title {
+color: white;
+}
+.pizza-page {
+background-image: url('pizza-background.png');
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+background-attachment: fixed;
+min-height: 100vh;
+color: white;
+}
+.donut-page {
+background-image: url('donut-back.png');
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+background-attachment: fixed;
+min-height: 100vh;
+color: black;
+}
+.dtitle {
+color: black;
+}

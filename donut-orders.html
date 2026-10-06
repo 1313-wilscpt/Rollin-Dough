@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donut Orders | Rollin Dough Pizza & Donuts</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+form {
+    display: grid;
+    gap: 15px;
+}
+
+input,
+select,
+textarea,
+button {
+    padding: 10px;
+}
+
+button {
+    background: #ff9800;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #f57c00;
+}
+
+.total {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #ff9800;
+}
+</style>
+</head>
+
+<body class="donut-page">
+
+<h1 class="dtitle">Donut Order Form</h1>
+
+<form id="donutOrderForm">
+
+    <label>Name</label>
+    <input type="text" id="name" required>
+
+    <label>Phone Number</label>
+    <input type="tel" id="phone" required>
+
+    <label>Donut Type</label>
+    <select id="donutType" onchange="updatePrice()">
+        <option value="1.99">Glazed Donut ($1.99)</option>
+        <option value="2.99">Chocolate Donut ($2.99)</option>
+        <option value="2.49">Sprinkle Donut ($2.49)</option>
+        <option value="2.79">Jelly Filled ($2.79)</option>
+    </select>
+
+    <label>Quantity</label>
+    <input
+        type="number"
+        id="quantity"
+        min="1"
+        value="1"
+        onchange="updatePrice()"
+        oninput="updatePrice()"
+    >
+
+    <div class="total">
+        Total: $<span id="total">1.99</span>
+    </div>
+
+    <label>Special Instructions</label>
+    <textarea id="instructions" rows="4"></textarea>
+
+    <button type="submit">Place Donut Order</button>
+
+</form>
+
+<script>
+function updatePrice() {
+    const price = Number(document.getElementById("donutType").value);
+    const quantity = Number(document.getElementById("quantity").value);
+
+    const total = price * quantity;
+
+    document.getElementById("total").textContent =
+        total.toFixed(2);
+}
+
+document.getElementById("donutOrderForm")
+.addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const donutName =
+        document.getElementById("donutType")
+        .selectedOptions[0]
+        .text;
+
+    const quantity =
+        document.getElementById("quantity").value;
+
+    const order = {
+        customerName:
+            document.getElementById("name").value,
+
+        phone:
+            document.getElementById("phone").value,
+
+        pizzaType: donutName,
+
+        size: quantity,
+
+        toppings: [],
+
+        instructions:
+            document.getElementById("instructions").value,
+
+        total:
+            document.getElementById("total").textContent
+    };
+
+    try {
+
+        const response = await fetch(
+            "http://localhost:3000/api/orders",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(order)
+            }
+        );
+
+        const data = await response.json();
+
+        alert(data.message);
+
+        document.getElementById("donutOrderForm").reset();
+
+        document.getElementById("quantity").value = 1;
+
+        updatePrice();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Unable to submit order.");
+    }
+
+});
+
+updatePrice();
+</script>
+
+</body>
+</html>

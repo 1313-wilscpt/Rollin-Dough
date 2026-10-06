@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pizza Orders | Rollin Dough Pizza & Donuts</title>
+<link rel="stylesheet" href="style.css">
+ 
+<style>
+body {
+font-family: Arial, sans-serif;
+max-width: 800px;
+margin: auto;
+padding: 20px;
+}
+ 
+form {
+display: grid;
+gap: 15px;
+}
+ 
+input,
+select,
+textarea,
+button {
+padding: 10px;
+}
+ 
+.toppings {
+display: grid;
+gap: 8px;
+}
+ 
+button {
+background: #d32f2f;
+color: white;
+border: none;
+cursor: pointer;
+}
+ 
+button:hover {
+background: #b71c1c;
+}
+ 
+.total {
+font-size: 1.3rem;
+font-weight: bold;
+color: #d32f2f;
+}
+</style>
+</head>
+ 
+<body class="pizza-page">
+ 
+<h1>Pizza Order Form</h1>
+ 
+<form id="pizzaOrderForm">
+ 
+<label>Name</label>
+<input type="text" id="name" required>
+ 
+<label>Phone Number</label>
+<input type="tel" id="phone" required>
+ 
+<label>Crust Type</label>
+<select id="pizzaType">
+<option>Thin Crust</option>
+<option>Handtossed</option>
+<option>Pan</option>
+</select>
+ 
+<label>Size</label>
+<select id="size" onchange="updatePrice()">
+<option value="10">Small ($10)</option>
+<option value="15">Medium ($15)</option>
+<option value="20">Large ($20)</option>
+</select>
+ 
+<label>Choose Toppings</label>
+ 
+<div class="toppings">
+ 
+<label>
+<input type="checkbox" class="topping" data-name="Pepperoni" value="2" onchange="updatePrice()">
+Pepperoni (+$2)
+</label>
+ 
+<label>
+<input type="checkbox" class="topping" data-name="Sausage" value="2" onchange="updatePrice()">
+Sausage (+$2)
+</label>
+ 
+<label>
+<input type="checkbox" class="topping" data-name="Bacon" value="2" onchange="updatePrice()">
+Bacon (+$2)
+</label>
+ 
+<label>
+<input type="checkbox" class="topping" data-name="Mushrooms" value="1" onchange="updatePrice()">
+Mushrooms (+$1)
+</label>
+ 
+<label>
+<input type="checkbox" class="topping" data-name="Onions" value="1" onchange="updatePrice()">
+Onions (+$1)
+</label>
+ 
+<label>
+<input type="checkbox" class="topping" data-name="Green Peppers" value="1" onchange="updatePrice()">
+Green Peppers (+$1)
+</label>
+ 
+<label>
+<input type="checkbox" class="topping" data-name="Black Olives" value="1" onchange="updatePrice()">
+Black Olives (+$1)
+</label>
+ 
+</div>
+ 
+<div class="total">
+Total: $<span id="total">10.00</span>
+</div>
+ 
+<label>Special Instructions</label>
+<textarea id="instructions" rows="4"></textarea>
+ 
+<button type="submit">Place Pizza Order</button>
+ 
+</form>
+ 
+<script>
+function updatePrice() {
+let total = Number(document.getElementById("size").value);
+ 
+document.querySelectorAll(".topping:checked").forEach(topping => {
+total += Number(topping.value);
+});
+ 
+document.getElementById("total").textContent = total.toFixed(2);
+}
+ 
+document.getElementById("pizzaOrderForm").addEventListener("submit", (e) => {
+e.preventDefault();
+ 
+const toppings = [];
+ 
+document.querySelectorAll(".topping:checked").forEach(topping => {
+toppings.push(topping.dataset.name);
+});
+ 
+const order = {
+customerName: document.getElementById("name").value,
+phone: document.getElementById("phone").value,
+pizzaType: document.getElementById("pizzaType").value,
+size: document.getElementById("size").selectedOptions[0].text,
+toppings: toppings,
+instructions: document.getElementById("instructions").value,
+total: document.getElementById("total").textContent
+};
+ 
+localStorage.setItem(
+"currentPizzaOrder",
+JSON.stringify(order)
+);
+ 
+window.location.href = "review-order.html";
+});
+</script>
+ 
+</body>
+</html>

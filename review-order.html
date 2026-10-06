@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Order | Rollin Dough Pizza & Donuts</title>
+</head>
+<body>
+
+    <h1>Review Your Order</h1>
+
+    <div id="orderSummary">
+        <!-- Order details will go here -->
+    </div>
+
+    <button id="editOrderBtn">Edit Order</button>
+    <button id="confirmOrderBtn">Confirm Order</button>
+
+    
+
+
+<script>
+const order = JSON.parse(localStorage.getItem("currentPizzaOrder"));
+
+if (order) {
+    document.getElementById("orderSummary").innerHTML = `
+        <h2>Order Summary</h2>
+        <p><strong>Name:</strong> ${order.customerName}</p>
+        <p><strong>Phone:</strong> ${order.phone}</p>
+        <p><strong>Crust:</strong> ${order.pizzaType}</p>
+        <p><strong>Size:</strong> ${order.size}</p>
+        <p><strong>Toppings:</strong> ${order.toppings.join(", ")}</p>
+        <p><strong>Instructions:</strong> ${order.instructions}</p>
+        <p><strong>Total:</strong> $${order.total}</p>
+    `;
+}
+
+</script>
+<script>
+document.getElementById("editOrderBtn").addEventListener("click", () => {
+    window.location.href = "pizza-orders.html";
+});
+</script>
+<script>
+document.getElementById("confirmOrderBtn").addEventListener("click", () => {
+ 
+const order = JSON.parse(
+localStorage.getItem("currentPizzaOrder")
+);
+ 
+let orders = JSON.parse(
+localStorage.getItem("pizzaOrders")
+) || [];
+ 
+orders.push(order);
+ 
+localStorage.setItem(
+"pizzaOrders",
+JSON.stringify(orders)
+);
+ 
+localStorage.removeItem("currentPizzaOrder");
+ 
+alert("Order Confirmed!");
+ 
+window.location.href = "index.html";
+});
+</script>
+</body>
+</html>
