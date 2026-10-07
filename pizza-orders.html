@@ -123,11 +123,42 @@ Total: $<span id="total">10.00</span>
  
 <label>Special Instructions</label>
 <textarea id="instructions" rows="4"></textarea>
- 
-<button type="submit">Place Pizza Order</button>
+ <button type="button" id="addToCartBtn">
+    Add To Cart
+</button>
+<button type="button" onclick="window.location.href='cart.html'">
+    View Cart
+</button>
  
 </form>
- 
+ <script>
+document.getElementById("addToCartBtn").addEventListener("click", () => {
+
+    const toppings = [];
+
+    document.querySelectorAll(".topping:checked").forEach(topping => {
+        toppings.push(topping.dataset.name);
+    });
+
+    const order = {
+        customerName: document.getElementById("name").value,
+        phone: document.getElementById("phone").value,
+        pizzaType: document.getElementById("pizzaType").value,
+        size: document.getElementById("size").selectedOptions[0].text,
+        toppings: toppings,
+        instructions: document.getElementById("instructions").value,
+        total: document.getElementById("total").textContent
+    };
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    cart.push(order);
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    alert("Pizza added to cart!");
+});
+</script>
 <script>
 function updatePrice() {
 let total = Number(document.getElementById("size").value);

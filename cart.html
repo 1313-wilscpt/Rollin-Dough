@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart | Rollin Dough Pizza & Donuts</title>
+</head>
+<body>
+
+    <h1>Your Cart</h1>
+
+    <div id="cartItems"></div>
+
+    <script>
+       const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+let html = "";
+let grandTotal = 0;
+
+if (cart.length === 0) {
+    html = "<p>Your cart is empty.</p>";
+} else {
+    cart.forEach((item, index) => {
+
+        grandTotal += Number(item.total);
+
+        html += `
+            <h3>Pizza ${index + 1}</h3>
+
+            <p><strong>Name:</strong> ${item.customerName}</p>
+
+            <p><strong>Phone:</strong> ${item.phone}</p>
+
+            <p><strong>Crust Type:</strong> ${item.pizzaType}</p>
+
+            <p><strong>Size:</strong> ${item.size}</p>
+
+            <p><strong>Toppings:</strong> ${item.toppings.join(", ")}</p>
+
+            <p><strong>Instructions:</strong> ${item.instructions}</p>
+
+            <p><strong>Total:</strong> $${item.total}</p>
+
+            <button onclick="removeItem(${index})">
+                Remove Pizza
+            </button>
+
+            <hr>
+        `;
+    });
+
+    html += `
+        <h2>Grand Total: $${grandTotal.toFixed(2)}</h2>
+    `;
+}
+html += `
+    <h2>Grand Total: $${grandTotal.toFixed(2)}</h2>
+
+    <button onclick="checkout()">
+        Checkout
+    </button>
+`;
+
+document.getElementById("cartItems").innerHTML = html;
+
+function removeItem(index) {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    cart.splice(index, 1);
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    location.reload();
+}
+
+ async function checkout() {
+
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    try {
+
+        for (const order of cart) {
+
+            await fetch("http://localhost:3000/api/orders", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(order)
+            });
+
+        }
+
+        localStorage.removeItem("cart");
+
+        window.location.href = "checkout.html";
+
+    } catch (error) {
+
+        console.error("Checkout failed:", error);
+
+        alert("Failed to place order.");
+
+    }
+}
+    </script>
+
+</body>
+</html>
