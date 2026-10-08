@@ -73,15 +73,17 @@ function removeItem(index) {
     location.reload();
 }
 
- async function checkout() {
+async function checkout() {
 
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     try {
 
+        let lastOrderId = null;
+
         for (const order of cart) {
 
-            await fetch("http://localhost:3000/api/orders", {
+            const response = await fetch("http://localhost:3000/api/orders", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -89,11 +91,20 @@ function removeItem(index) {
                 body: JSON.stringify(order)
             });
 
+            const result = await response.json();
+
+            lastOrderId = result.orderId;
         }
 
+        // Save order number from server
+        localStorage.setItem("orderNumber", lastOrderId);
+        
+localStorage.setItem("lastOrder", JSON.stringify(cart));
+        // Clear cart
         localStorage.removeItem("cart");
 
-        window.location.href = "checkout.html";
+        // Go to confirmation page
+        window.location.href = "confirmation.html";
 
     } catch (error) {
 
@@ -103,6 +114,7 @@ function removeItem(index) {
 
     }
 }
+
     </script>
 
 </body>

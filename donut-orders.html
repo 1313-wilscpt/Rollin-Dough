@@ -83,9 +83,47 @@ button:hover {
     <label>Special Instructions</label>
     <textarea id="instructions" rows="4"></textarea>
 
-    <button type="submit">Place Donut Order</button>
-
+    <button type="button" id="addToCartBtn">
+    Add To Cart
+</button>
+<button type="button" onclick="window.location.href='cart.html'">
+    View Cart
+</button>
 </form>
+
+<script>
+document.getElementById("addToCartBtn").addEventListener("click", () => {
+
+    const donutName =
+        document.getElementById("donutType")
+        .selectedOptions[0]
+        .text;
+
+    const order = {
+        orderType: "Donut",
+        customerName: document.getElementById("name").value,
+        phone: document.getElementById("phone").value,
+        pizzaType: donutName,
+        size: document.getElementById("quantity").value,
+        toppings: [],
+        instructions: document.getElementById("instructions").value,
+        total: document.getElementById("total").textContent
+    };
+
+    let cart =
+        JSON.parse(localStorage.getItem("cart")) || [];
+
+    cart.push(order);
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+    alert("Donut order added to cart!");
+});
+</script>
+
 
 <script>
 function updatePrice() {
@@ -97,11 +135,11 @@ function updatePrice() {
     document.getElementById("total").textContent =
         total.toFixed(2);
 }
-
+/*
 document.getElementById("donutOrderForm")
 .addEventListener("submit", async (e) => {
 
-    e.preventDefault();
+   e.preventDefault();
 
     const donutName =
         document.getElementById("donutType")
@@ -111,25 +149,27 @@ document.getElementById("donutOrderForm")
     const quantity =
         document.getElementById("quantity").value;
 
-    const order = {
-        customerName:
-            document.getElementById("name").value,
+  const order = {
+    customerName:
+        document.getElementById("name").value,
 
-        phone:
-            document.getElementById("phone").value,
+    phone:
+        document.getElementById("phone").value,
 
-        pizzaType: donutName,
+    pizzaType: donutName,
 
-        size: quantity,
+    size: quantity,
 
-        toppings: [],
+    toppings: [],
 
-        instructions:
-            document.getElementById("instructions").value,
+    instructions:
+        document.getElementById("instructions").value,
 
-        total:
-            document.getElementById("total").textContent
-    };
+    total:
+        document.getElementById("total").textContent,
+
+    orderType: "Donut"
+};
 
     try {
 
@@ -162,7 +202,7 @@ document.getElementById("donutOrderForm")
     }
 
 });
-
+*/
 updatePrice();
 </script>
 
